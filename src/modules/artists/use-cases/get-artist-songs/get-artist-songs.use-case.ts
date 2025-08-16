@@ -28,15 +28,12 @@ export class GetArtistSongsUseCase implements IUseCase<GetArtistSongsArgs, z.inf
 
     if (!data) throw new HTTPException(404, { message: 'artist songs not found' })
 
-    // sirf music id + name
-    const songs = data.topSongs.songs.map(song => ({
-      musicId: song.id,
-      name: song.name
-    }))
-
     return {
-      total: data.topSongs.total, // total songs count
-      songs
+      total: data.topSongs.total,
+      songs: data.topSongs.songs.map(song => ({
+        musicId: song.id || song.song_id,
+        name: song.name || song.title
+      }))
     }
   }
 }
